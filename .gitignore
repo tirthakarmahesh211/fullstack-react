@@ -1,3 +1,4 @@
 semantic-ui/
 semantic/
 *.pdf
+node_modules/
