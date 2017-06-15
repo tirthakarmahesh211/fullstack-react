@@ -1,16 +1,16 @@
 [
     {
-        "title": "Mow the lawn",
-        "project": "House Chores",
-        "elapsed": 5456099,
-        "id": "0a4a79cb-b06d-4cb1-883d-549a1e3b66d7",
-        "runningSince": 1496435271472
-    },
-    {
         "title": "Ponder origins of universe",
         "project": "Life Chores",
         "id": "2c43306e-5b44-4ff8-8753-33c35adbd06f",
-        "elapsed": 40209348317,
+        "elapsed": 81303675639,
         "runningSince": null
+    },
+    {
+        "title": "Yuck",
+        "project": "Blah",
+        "id": "4672d23b-4615-4723-8dd3-3d19a62dfeb0",
+        "elapsed": 0,
+        "runningSince": 1497563429083
     }
 ]
