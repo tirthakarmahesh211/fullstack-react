@@ -10,7 +10,7 @@ import Four from './04-basic-input.js';
 import Five from './05-state-input.js';
 import Six from './06-state-input-multi.js';
 import Seven from './07-basic-validation.js';
-import Eight from './08-field-component-form.js';
+import Eight from './form.js';
 import Nine from './09-async-fetch.js';
 import Ten from './10-remote-persist.js';
 import Eleven from './11-redux-app.js';
@@ -58,13 +58,13 @@ function createRoute(nStr) {
   return (
     <div className="ui container">
       {React.createElement(routes[i])}
-      <div style={navStyle} 
-           className='ui fluid three item pagination menu'>
-        { isFirst ? '' : <a href={`#/${i}`} className='item'>{'<'}</a> }
+      <div style={navStyle}
+        className='ui fluid three item pagination menu'>
+        {isFirst ? '' : <a href={`#/${i}`} className='item'>{'<'}</a>}
         <a href={location.href.replace(location.hash, '')}
-           className='item'
-          >TOC</a>
-        { isLast ? '' : <a href={`#/${(i + 2)}`} className='item'>{' > '}</a> }
+          className='item'
+        >TOC</a>
+        {isLast ? '' : <a href={`#/${(i + 2)}`} className='item'>{' > '}</a>}
       </div>
     </div>
   );

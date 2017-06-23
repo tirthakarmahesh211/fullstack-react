@@ -19,10 +19,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "npm run run-e2e",
     "eject": "react-scripts eject",
     "e2e": "nightwatch",
-    "test": "npm run run-e2e",
     "run-e2e": "./node_modules/.bin/concurrently -k 'npm start' 'npm run e2e'"
   }
 }

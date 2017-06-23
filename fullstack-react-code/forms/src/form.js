@@ -1,13 +1,13 @@
-import React from 'react';
-import isEmail from 'validator/lib/isEmail';
+import React, { Component } from 'react'
+import isEmail from 'validator/lib/isEmail'
 
-const Field = require('./field.js');
+const Field = require('./field.js')
 
 const content = document.createElement('div');
 document.body.appendChild(content);
 
-module.exports = class extends React.Component {
-  static displayName = "08-field-component-form";
+module.exports = class extends Component {
+  static displayName = "field-component-form";
 
   state = {
     fields: {
@@ -18,44 +18,44 @@ module.exports = class extends React.Component {
     people: [],
   };
 
+  onInputChange = ({ name, value, error }) => {
+    const fields = this.state.fields
+    const fieldErrors = this.state.fieldErrors
+
+    fields[name] = value
+    fieldErrors[name] = error
+
+    this.setState({ fields, fieldErrors })
+  }
+
   onFormSubmit = (evt) => {
-    const people = this.state.people;
-    const person = this.state.fields;
+    const people = this.state.people
+    const person = this.state.fields
 
-    evt.preventDefault();
+    evt.preventDefault()
 
-    if (this.validate()) return;
+    if (this.validate()) return
 
     this.setState({
       people: people.concat(person),
       fields: {
         name: '',
-        email: '',
-      },
-    });
-  };
+        email: ''
+      }
+    })
+  }
 
-  onInputChange = ({ name, value, error }) => {
-    const fields = this.state.fields;
-    const fieldErrors = this.state.fieldErrors;
+  validate() {
+    const person = this.state.fields
+    const fieldErrors = this.state.fieldErrors
+    const errMessages = Object.keys(fieldErrors).filter((k) => fieldErrors[k])
 
-    fields[name] = value;
-    fieldErrors[name] = error;
+    if (!person.name) return true
+    if (!person.email) return true
+    if (errMessages.length) return true
 
-    this.setState({ fields, fieldErrors });
-  };
-
-  validate = () => {
-    const person = this.state.fields;
-    const fieldErrors = this.state.fieldErrors;
-    const errMessages = Object.keys(fieldErrors).filter((k) => fieldErrors[k]);
-
-    if (!person.name) return true;
-    if (!person.email) return true;
-    if (errMessages.length) return true;
-
-    return false;
-  };
+    return false
+  }
 
   render() {
     return (
@@ -82,8 +82,6 @@ module.exports = class extends React.Component {
             validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
           />
 
-          <br />
-
           <input type='submit' disabled={this.validate()} />
         </form>
 
@@ -96,6 +94,6 @@ module.exports = class extends React.Component {
           </ul>
         </div>
       </div>
-    );
+    )
   }
-};
+}
