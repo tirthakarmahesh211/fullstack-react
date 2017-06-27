@@ -2,17 +2,20 @@ import React, { Component } from 'react'
 import isEmail from 'validator/lib/isEmail'
 
 const Field = require('./field.js')
+const CourseSelect = require('./course-select.js')
 
 const content = document.createElement('div');
 document.body.appendChild(content);
 
 module.exports = class extends Component {
-  static displayName = "field-component-form";
+  static displayName = "async-fetch-form";
 
   state = {
     fields: {
       name: '',
       email: '',
+      course: null,
+      department: null
     },
     fieldErrors: {},
     people: [],
@@ -40,7 +43,9 @@ module.exports = class extends Component {
       people: people.concat(person),
       fields: {
         name: '',
-        email: ''
+        email: '',
+        course: null,
+        department: null,
       }
     })
   }
@@ -52,6 +57,8 @@ module.exports = class extends Component {
 
     if (!person.name) return true
     if (!person.email) return true
+    if (!person.course) return true
+    if (!person.department) return true
     if (errMessages.length) return true
 
     return false
@@ -82,14 +89,23 @@ module.exports = class extends Component {
             validate={(val) => (isEmail(val) ? false : 'Invalid Email')}
           />
 
+          <br />
+
+          <CourseSelect
+            department={this.state.fields.department}
+            course={this.state.fields.course}
+            onChange={this.onInputChange}
+          />
+
+          <br />
           <input type='submit' disabled={this.validate()} />
         </form>
 
         <div>
           <h3>People</h3>
           <ul>
-            {this.state.people.map(({ name, email }, i) =>
-              <li key={i}>{name} ({email})</li>
+            {this.state.people.map(({ name, email, department, course }, i) =>
+              <li key={i}>{[name, email, department, course].join(' - ')}</li>
             )}
           </ul>
         </div>
