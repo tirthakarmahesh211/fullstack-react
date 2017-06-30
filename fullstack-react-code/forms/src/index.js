@@ -14,7 +14,7 @@ import Eight from './08-field-component-form.js'
 import Nine from './09-async-fetch.js'
 import Ten from './10-remote-persist.js'
 import Eleven from './11-redux-app.js'
-import Twelve from './form.js'
+import Twelve from './app.js'
 
 const routes = [
   One, Two, Three, Four, Five,
