@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from './components/App';
 
 import "./styles/index.css";
-import "../semantic/dist/semantic.css";
+import "./semantic-dist/semantic.css";
 
 // [STEP 1] Comment out this line:
 import './index-complete';

@@ -73,7 +73,7 @@ module.exports = class extends Component {
     const dirty = Object.keys(this.state.fields).length
     let status = this.props.saveStatus
     if (status === 'SUCCESS' && dirty) status = 'READY'
-
+    console.log(status, dirty)
     let submit = {
       SAVING: <input value='Saving...' type='submit' disabled />,
       SUCCESS: <input value='Saved!' type='submit' disabled />,

@@ -7,7 +7,7 @@ import App from "./App.js";
 import "./index.css";
 import "./App.css";
 
-import "../semantic/dist/semantic.css";
+import "./semantic-dist/semantic.min.css";
 
 // [STEP 1] Comment out this line:
 import "./index-complete";

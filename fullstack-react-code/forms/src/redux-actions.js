@@ -1,39 +1,43 @@
 /* eslint-disable no-use-before-define */
 export const FETCH_PEOPLE_REQUEST = 'FETCH_PEOPLE_REQUEST'
-function fetchPeopleRequest() {
+function fetchPeopleRequest () {
   return { type: FETCH_PEOPLE_REQUEST }
 }
 
 export const FETCH_PEOPLE_SUCCESS = 'FETCH_PEOPLE_SUCCESS'
-function fetchPeopleSuccess(people) {
+function fetchPeopleSuccess (people) {
   return { type: FETCH_PEOPLE_SUCCESS, people }
 }
 
+export const FETCH_PEOPLE_FAILURE = 'FETCH_PEOPLE_SUCCESS'
+function fetchPeopleFailure (error) {
+  return { type: FETCH_PEOPLE_FAILURE, error }
+}
+
 export const SAVE_PEOPLE_REQUEST = 'SAVE_PEOPLE_REQUEST'
-function savePeopleRequest() {
+function savePeopleRequest () {
   return { type: SAVE_PEOPLE_REQUEST }
 }
 
 export const SAVE_PEOPLE_FAILURE = 'SAVE_PEOPLE_FAILURE'
-function savePeopleFailure(error) {
+function savePeopleFailure (error) {
   return { type: SAVE_PEOPLE_FAILURE, error }
 }
 
 export const SAVE_PEOPLE_SUCCESS = 'SAVE_PEOPLE_SUCCESS'
-function savePeopleSuccess(people) {
+function savePeopleSuccess (people) {
   return { type: SAVE_PEOPLE_SUCCESS, people }
 }
 
-export function fetchPeople() {
+export function fetchPeople () {
   return function (dispatch) {
     dispatch(fetchPeopleRequest())
-    apiClient.loadPeople().then((people) => {
-      dispatch(fetchPeopleSuccess(people))
-    })
+    apiClient.loadPeople()
+      .then((people) => { dispatch(fetchPeopleSuccess(people)) })
   }
 }
 
-export function savePeople(people) {
+export function savePeople (people) {
   return function (dispatch) {
     dispatch(savePeopleRequest())
     apiClient.savePeople(people)

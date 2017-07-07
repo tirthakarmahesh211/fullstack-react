@@ -1,5 +1,5 @@
 import {
-  FETCH_PEOPLE_REQUEST, FETCH_PEOPLE_SUCCESS,
+  FETCH_PEOPLE_REQUEST, FETCH_PEOPLE_SUCCESS, FETCH_PEOPLE_FAILURE,
   SAVE_PEOPLE_REQUEST, SAVE_PEOPLE_FAILURE, SAVE_PEOPLE_SUCCESS
 } from './redux-actions.js'
 
@@ -26,6 +26,10 @@ export function reducer (state = initialState, action) {
         people: action.people,
         isLoading: false
       })
+    case FETCH_PEOPLE_FAILURE:
+      return Object.assign({}, state, {
+        isLoading: false
+      })
     case SAVE_PEOPLE_REQUEST:
       return Object.assign({}, state, {
         saveStatus: 'SAVING'
@@ -43,7 +47,7 @@ export function reducer (state = initialState, action) {
           course: null,
           department: null
         },
-        saveSatus: 'SUCCESS'
+        saveStatus: 'SUCCESS'
       })
     default:
       return state

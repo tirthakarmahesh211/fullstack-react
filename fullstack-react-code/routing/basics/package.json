@@ -12,8 +12,7 @@
     "prop-types": "15.5.10",
     "react": "15.5.4",
     "react-dom": "15.5.4",
-    "react-router-dom": "4.1.1",
-    "semantic-ui": "2.2.6"
+    "react-router-dom": "4.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

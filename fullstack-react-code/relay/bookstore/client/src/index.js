@@ -9,7 +9,7 @@ import useRelay from 'react-router-relay';
 
 import routes from './routes';
 
-import '../semantic/dist/semantic.css';
+import './semantic-dist/semantic.min.css';
 import './styles/index.css';
 
 // Customize this based on your server's URL

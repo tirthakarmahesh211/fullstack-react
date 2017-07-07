@@ -2,6 +2,14 @@
 import fetch from 'isomorphic-fetch';
 import URI from 'urijs';
 import camelcaseKeys from 'camelcase-keys';
+import btoa from 'btoa';
+import path from 'path';
+import fs from 'fs';
+
+// Credentials for Spotify
+const SPOTIFY_CLIENT_ID = '6518e61ac2a54a968ad5db5fc9d4806f';
+const SPOTIFY_CLIENT_SECRET = '24492f0774a0437181877887cb68ac9e';
+const BASE_64_ENCODED_CLIENT_CREDENTIALS = btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`)
 
 const getFirstImageUrl = (images) => (
   images && images[0] && images[0].url
@@ -19,19 +27,6 @@ const filterDupes = (albums) => (
   }, [])
 );
 
-const BASE_URI = 'https://api.spotify.com/v1';
-
-function get(url) {
-  return fetch(url, {
-    method: 'get',
-    headers: {
-      accept: 'application/json',
-    },
-  }).then(checkStatus)
-    .then(parseJson)
-    .then((data) => camelcaseKeys(data, { deep: true }));
-}
-
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -39,6 +34,7 @@ function checkStatus(response) {
     const error = new Error(`HTTP Error ${response.statusText}`);
     error.status = response.statusText;
     error.response = response;
+    console.log('Error communicating with Spotify:');
     console.log(error);
     throw error;
   }
@@ -78,73 +74,104 @@ function parseTrack(track) {
   };
 }
 
-export function getAlbum(albumId) {
-  return get(
-    BASE_URI + '/albums/' + albumId
-  ).then((data) => parseAlbum(data));
-}
-
-export function getAlbums(albumIds) {
-  return get(
-    BASE_URI + '/albums?ids=' + albumIds.join(',')
-  ).then((data) => (
-    data.albums.map((a) => parseAlbum(a))
-  ));
-}
-
-export function getArtist(artistId) {
-  return get(
-    BASE_URI + '/artists/' + artistId
-  ).then((data) => parseArtist(data));
-}
-
-export function getArtistTopTracks(artistId) {
-  const url = URI(
-    BASE_URI + '/artists/' + artistId + '/top-tracks'
-  ).query({ country: 'us' });
-
-  return get(url).then((data) => (
-    data.tracks.map((t) => parseTrack(t))
-  ));
-}
-
-export function getArtistAlbums(artistId) {
-  const url = (
-    BASE_URI + '/artists/' + artistId + '/albums?album_type=album'
-  );
-
-  return get(url).then((data) => (
-    data.items.map((a) => parseAlbum(a))
-  ));
-}
-
-export function getArtistAlbumsDetailed(artistId) {
-  return this.getArtistAlbums(artistId)
-           .then((albums) => this.getAlbums(
-             albums.map((a) => a.id)
-           ));
-}
-
-export function getArtistDetailed(artistId) {
-  return Promise.all([
-    this.getArtist(artistId),
-    this.getArtistTopTracks(artistId),
-    this.getArtistAlbumsDetailed(artistId),
-  ]).then(([ artist, topTracks, albums ]) => ({
-    artist,
-    topTracks,
-    albums: filterDupes(albums),
-  }));
-}
+const SPOTIFY_BASE_URI = 'https://api.spotify.com/v1';
 
 const SpotifyClient = {
-  getAlbum,
-  getAlbums,
-  getArtist,
-  getArtistTopTracks,
-  getArtistAlbums,
-  getArtistAlbumsDetailed,
-  getArtistDetailed,
-};
+
+  _getWithToken(url, token) {
+    return fetch(url, {
+      method: 'get',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(checkStatus)
+      .then(parseJson)
+      .then((data) => camelcaseKeys(data, { deep: true }));
+  },
+
+  _get(url) {
+    if (this.token) {
+      return this._getWithToken(url, this.token)
+    } else {
+      return this._getApiToken().then((token) => (
+        this._getWithToken(url, token)
+      ));
+    }
+  },
+
+  _getApiToken() {
+    return fetch('https://accounts.spotify.com/api/token', {
+      method: 'post',
+      body: 'grant_type=client_credentials',
+      headers: {
+        Authorization: `Basic ${BASE_64_ENCODED_CLIENT_CREDENTIALS}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    }).then(checkStatus)
+      .then(parseJson)
+      .then((json) => json.access_token)
+      .then((token) => this.token = token)
+  },
+
+  getAlbum(albumId) {
+    return this._get(
+      SPOTIFY_BASE_URI + '/albums/' + albumId
+    ).then((data) => parseAlbum(data));
+  },
+
+  getAlbums(albumIds) {
+    return this._get(
+      SPOTIFY_BASE_URI + '/albums?ids=' + albumIds.join(',')
+    ).then((data) => (
+      data.albums.map((a) => parseAlbum(a))
+    ));
+  },
+
+  getArtist(artistId) {
+    return this._get(
+      SPOTIFY_BASE_URI + '/artists/' + artistId
+    ).then((data) => parseArtist(data));
+  },
+
+  getArtistTopTracks(artistId) {
+    const url = URI(
+      SPOTIFY_BASE_URI + '/artists/' + artistId + '/top-tracks'
+    ).query({ country: 'us' });
+
+    return this._get(url).then((data) => (
+      data.tracks.map((t) => parseTrack(t))
+    ));
+  },
+
+  getArtistAlbums(artistId) {
+    const url = (
+      SPOTIFY_BASE_URI + '/artists/' + artistId + '/albums?album_type=album'
+    );
+
+    return this._get(url).then((data) => (
+      data.items.map((a) => parseAlbum(a))
+    ));
+  },
+
+  getArtistAlbumsDetailed(artistId) {
+    return this.getArtistAlbums(artistId)
+             .then((albums) => this.getAlbums(
+               albums.map((a) => a.id)
+             ));
+  },
+
+  getArtistDetailed(artistId) {
+    return Promise.all([
+      this.getArtist(artistId),
+      this.getArtistTopTracks(artistId),
+      this.getArtistAlbumsDetailed(artistId),
+    ]).then(([ artist, topTracks, albums ]) => ({
+      artist,
+      topTracks,
+      albums: filterDupes(albums),
+    }));
+  },
+}
 
 export default SpotifyClient;

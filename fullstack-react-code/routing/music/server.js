@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 
-import { getAlbums } from './SpotifyClient';
+import SpotifyClient from './SpotifyClient';
 
 const app = express();
 
@@ -11,8 +11,9 @@ if (process.env.NODE_ENV !== 'TEST') {
   app.use(morgan('combined'));
 }
 
-// A fake API token we validate against
+// A fake API token our server validates
 export const API_TOKEN = 'D6W69PRgCoDKgHZGJmRUNA';
+
 
 const extractToken = (req) => (
   req.query.token
@@ -58,7 +59,7 @@ app.get('/api/check_token', (req, res) => {
 app.get('/api/albums', authenticatedRoute, (req, res) => {
   const albumIds = req.query.ids.split(',');
 
-  getAlbums(albumIds).then((albums) => (
+  SpotifyClient.getAlbums(albumIds).then((albums) => (
     res.json(albums)
   )).catch((error) => (
     res.status(500).json({
