@@ -1,35 +1,89 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 
-class App extends React.Component {
-  render() {
-    return (
-      <div
-        className='ui text container'
-      >
-        <h2 className='ui dividing header'>
-          Which body of water?
-        </h2>
+import createHistory from 'history/createBrowserHistory'
 
-        <ul>
-          <li>
-            <a href='/atlantic'>
-              <code>/atlantic</code>
-            </a>
-          </li>
-          <li>
-            <a href='/pacific'>
-              <code>/pacific</code>
-            </a>
-          </li>
-        </ul>
-
-        <hr />
-
-        {/* We'll insert the Route components here */}
-      </div>
-    );
+const Route = ({ path, component }, { location }) => {
+  const pathname = location.pathname
+  if (pathname.match(path)) {
+    return (React.createElement(component))
+  } else {
+    return null
   }
 }
+Route.contextTypes = {
+  location: PropTypes.object,
+}
+
+const Link = ({ to, children }, { history }) => (
+  <a
+    onClick={(e) => {
+      e.preventDefault()
+      history.push(to)
+    }}
+    href={to}
+  >
+    {children}
+  </a>
+)
+Link.contextTypes = {
+  history: PropTypes.object,
+}
+
+class Router extends React.Component {
+  static childContextTypes = {
+    history: PropTypes.object,
+    location: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props)
+    this.history = createHistory()
+    this.history.listen(() => this.forceUpdate())
+  }
+
+  getChildContext() {
+    return {
+      history: this.history,
+      location: window.location,
+    }
+  }
+
+  render() {
+    return this.props.children
+  }
+}
+
+
+const App = () => (
+  <Router>
+    <div
+      className='ui text container'
+    >
+      <h2 className='ui dividing header'>
+        Which body of water?
+        </h2>
+
+      <ul>
+        <li>
+          <Link to='/atlantic'>
+            <code>/atlantic</code>
+          </Link>
+        </li>
+        <li>
+          <Link to='/pacific'>
+            <code>/pacific</code>
+          </Link>
+        </li>
+      </ul>
+
+      <hr />
+
+      <Route path='/atlantic' component={Atlantic} />
+      <Route path='/pacific' component={Pacific} />
+
+    </div>
+  </Router>
+)
 
 const Atlantic = () => (
   <div>
@@ -39,7 +93,7 @@ const Atlantic = () => (
       surface of the earth.
     </p>
   </div>
-);
+)
 
 const Pacific = () => (
   <div>
@@ -49,6 +103,6 @@ const Pacific = () => (
       'mar pacifico' in 1521, which means peaceful sea.
     </p>
   </div>
-);
+)
 
-export default App;
+export default App
