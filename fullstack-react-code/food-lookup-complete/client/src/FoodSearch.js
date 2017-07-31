@@ -85,6 +85,7 @@ class FoodSearch extends React.Component {
             {
               this.state.foods.map((food, idx) => (
                 <tr
+
                   key={idx}
                   onClick={() => this.props.onFoodClick(food)}
                 >

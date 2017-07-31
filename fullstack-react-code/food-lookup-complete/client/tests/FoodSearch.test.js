@@ -90,7 +90,7 @@ describe('FoodSearch', () => {
         wrapper.update()
       })
 
-      it('should set teh state property `foods`', () => {
+      it('should set the state property `foods`', () => {
         expect(
           wrapper.state().foods
         ).toEqual(foods)
@@ -129,17 +129,80 @@ describe('FoodSearch', () => {
       })
 
       describe('then user types more', () => {
+        const newVal = 'broccx'
         beforeEach(() => {
-          // ... simulate user typing "x"
+          const input = wrapper.find('input').first()
+          input.simulate('change', {
+            target: {
+              value: newVal
+            }
+          })
+        })
+
+        it('should update the search to `broccx`', () => {
+          expect(
+            wrapper.state().searchValue
+          ).toEqual('broccx')
+        })
+        it('should call `Client.search()` with `newVal`', () => {
+          const secondInvocationArgs = Client.search.mock.calls[1]
+          expect(
+            secondInvocationArgs[0]
+          ).toEqual(newVal)
         })
 
         describe('and API returns no results', () => {
           beforeEach(() => {
-            // ... simulate API returning no results
+            const secondInvocationArgs = Client.search.mock.calls[1]
+            const cb = secondInvocationArgs[1]
+            cb([])
+            wrapper.update()
           })
 
-          // ... specs
+          it('should set the state property `foods`', () => {
+            expect(
+              wrapper.state().foods
+            ).toEqual([])
+          })
         })
+
+        describe('the the user clears with backspace', () => {
+          beforeEach(() => {
+            const input = wrapper.find('input').first()
+            input.simulate('change', {
+              target: { value: '' }
+            })
+          })
+          it('should set the state property `foods`', () => {
+            expect(
+              wrapper.state().foods
+            ).toEqual([])
+          })
+          it('should set the state property `showRemoveIcon`', () => {
+            expect(
+              wrapper.state().showRemoveIcon
+            ).toBe(false)
+          })
+        })
+
+        describe('the user clicks the remove icon', () => {
+          beforeEach(() => {
+            const icon = wrapper.find('.remove.icon').first();
+            icon.simulate('click');
+          });
+
+          it('should set the state property `foods`', () => {
+            expect(
+              wrapper.state().foods
+            ).toEqual([]);
+          });
+
+          it('should set the state property `showRemoveIcon`', () => {
+            expect(
+              wrapper.state().showRemoveIcon
+            ).toBe(false);
+          });
+        });
       })
     })
   })
