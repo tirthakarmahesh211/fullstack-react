@@ -1,26 +1,30 @@
 // @ts-check
 import React, { Component } from 'react';
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import uuid from 'uuid'
 
-/**
- * 
- * @param {Object} state State Object
- * @param {Object} action Action Object
- */
-function reducer(state, action) {
-  return {
-    activeThreadId: activeThreadIdReducer(state.activeThreadId, action),
-    threads: threadsReducer(state.threads, action),
-  }
-}
+const reducer = combineReducers({
+  activeThreadId: activeThreadIdReducer,
+  threads: threadsReducer,
+})
 
 /**
  * 
  * @param {Array} state Threads Array
  * @param {Object} action Action Object 
  */
-function threadsReducer(state, action) {
+function threadsReducer(state = [ // Two threads in state
+  {
+    id: '1-fca2', // hardcoded pseudo-UUID
+    title: 'Buzz Aldrin',
+    messages: messagesReducer(undefined, {}),
+  },
+  {
+    id: '2-be91',
+    title: 'Michael Collins',
+    messages: messagesReducer(undefined, {}),
+  },
+], action) {
   switch (action.type) {
     case 'ADD_MESSAGE':
     case 'DELETE_MESSAGE':
@@ -54,9 +58,11 @@ function findThreadIndex(threads, action) {
         (t) => t.id === action.threadId
       )
     case 'DELETE_MESSAGE':
-      return (t) => t.messages.find((m) => (
-        m.id === action.id
-      ))
+      return threads.findIndex(
+        (t) => t.messages.find((m) => (
+          m.id === action.id
+        ))
+      )
     default:
       break;
   }
@@ -67,7 +73,7 @@ function findThreadIndex(threads, action) {
  * @param {String} state ActiveThreadId String
  * @param {Object} action Action Object 
  */
-function activeThreadIdReducer(state, action) {
+function activeThreadIdReducer(state = '1-fca2', action) {
   if (action.type === 'OPEN_THREAD') {
     return action.id
   } else {
@@ -80,7 +86,7 @@ function activeThreadIdReducer(state, action) {
  * @param {Array} state Messages Array
  * @param {Object} action Action Object
  */
-function messagesReducer(state, action) {
+function messagesReducer(state = [], action) {
   if (action.type === 'ADD_MESSAGE') {
     const newMessage = {
       text: action.text,
@@ -94,28 +100,8 @@ function messagesReducer(state, action) {
     return state
   }
 }
-const initialState = {
-  activeThreadId: '1-fca2', // New state property
-  threads: [ // Two threads in state
-    {
-      id: '1-fca2', // hardcoded pseudo-UUID
-      title: 'Buzz Aldrin',
-      messages: [
-        { // This thread starts with a single message already
-          text: 'Twelve minutes to ignition.',
-          timestamp: Date.now(),
-          id: uuid.v4(),
-        },
-      ],
-    },
-    {
-      id: '2-be91',
-      title: 'Michael Collins',
-      messages: [],
-    },
-  ],
-}
-const store = createStore(reducer, initialState);
+
+const store = createStore(reducer);
 
 class App extends React.Component {
   componentDidMount() {
