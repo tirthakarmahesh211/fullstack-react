@@ -230,8 +230,7 @@ const mergeThreadProps = (stateProps, dispatchProps) => (
     ...stateProps,
     ...dispatchProps,
     onMessageSubmit: (text) => (
-      dispatchProps.dispatch(addMessage(text, state.thread.id)
-      })
+      dispatchProps.dispatch(addMessage(text, stateProps.thread.id))
     ),
   }
 )
