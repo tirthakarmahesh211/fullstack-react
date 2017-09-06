@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "go": "node index.js",
-    "start": "npm run go",
+    "start": "nodemon --exec npm run go",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
