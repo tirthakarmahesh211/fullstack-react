@@ -23,7 +23,7 @@ import * as loaders from './src/loaders'
 const app = express()
 
 app.use(basicAuth(function (user, pass) {
-  return user === '1' && pass === 'mypassword1';
+  return user === '5' && pass === 'mypassword1';
 }))
 
 app.use('/graphql', graphqlHTTP((req) => {
