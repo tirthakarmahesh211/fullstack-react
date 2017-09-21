@@ -9,7 +9,8 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLID
+  GraphQLID,
+  GraphQLEnumType
 } from 'graphql'
 
 import {
@@ -40,6 +41,45 @@ app.listen(3000, () => {
   console.log({ running: true })
 })
 
+const LevelEnum = new GraphQLEnumType({
+  name: 'PrivacyLevel',
+  values: {
+    PUBLIC: {
+      value: 'public',
+    },
+    ACQUAINTANCE: {
+      value: 'acquaintance'
+    },
+    FRIEND: {
+      value: 'friend'
+    },
+    TOP: {
+      value: 'top'
+    }
+  }
+})
+
+const RootMutation = new GraphQLObjectType({
+  name: 'RootMutation',
+  descritption: 'The root mutation',
+  fields: {
+    createPost: {
+      type: PostType,
+      args: {
+        body: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        level: {
+          type: new GraphQLNonNull(LevelEnum)
+        }
+      },
+      resolve(source, args, context) {
+        return loaders.createPost(args.body, args.level, context).then((nodeId) => loaders.getNodeById(nodeId))
+      }
+    }
+  }
+})
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   description: 'The root query',
@@ -60,29 +100,6 @@ const RootQuery = new GraphQLObjectType({
       },
       resolve(source, args, context, info) {
         return loaders.getNodeById(args.id);
-      }
-    }
-  }
-})
-
-let inMemoryStore = {}
-const RootMutation = new GraphQLObjectType({
-  name: 'RootMutation',
-  description: 'The root mutation',
-  fields: {
-    setNode: {
-      type: GraphQLString,
-      args: {
-        id: {
-          type: new GraphQLNonNull(GraphQLID)
-        },
-        value: {
-          type: new GraphQLNonNull(GraphQLString)
-        }
-      },
-      resolve(source, args) {
-        inMemoryStore[args.key] = args.value
-        return inMemoryStore[args.key]
       }
     }
   }
