@@ -10,7 +10,7 @@ const BookItem = (props) => {
       <div className='bookMeta'>
         <div className='authors'>
           {props.book.authors.count}
-          {this.props.book.authors.count > 1 ? ' Authors' : 'Author'}
+          {props.book.authors.count > 1 ? ' Authors' : 'Author'}
         </div>
         <h2>{props.book.name}</h2>
         <div className='tagline'>{props.book.tagline}</div>

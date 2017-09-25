@@ -1,4 +1,5 @@
-import React, { Link, Component } from 'react';
+import React, { Component } from 'react';
+import Link from 'react-router/lib/Link';
 import Relay from 'react-relay';
 import BookItem from './BookItem';
 
