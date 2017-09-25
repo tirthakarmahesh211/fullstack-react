@@ -53,6 +53,8 @@
   "dependencies": {
     "babel-relay-plugin": "0.10.0",
     "graphql-relay": "0.4.4",
+    "http-parser-js": "^0.4.8",
+    "http-proxy": "^1.16.2",
     "isomorphic-fetch": "2.2.1",
     "prop-types": "15.5.10",
     "react": "15.5.4",
