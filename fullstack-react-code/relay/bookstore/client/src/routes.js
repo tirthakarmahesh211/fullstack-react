@@ -1,22 +1,22 @@
-import Relay from 'react-relay';
-import React from 'react';
-import IndexRoute from 'react-router/lib/IndexRoute';
-import Route from 'react-router/lib/Route';
+import Relay from 'react-relay'
+import React from 'react'
+import IndexRoute from 'react-router/lib/IndexRoute'
+import Route from 'react-router/lib/Route'
 
-import App from './components/App';
-import AuthorPage from './components/AuthorPage';
-import BooksPage from './components/BooksPage';
+import App from './components/App'
+import AuthorPage from './components/AuthorPage'
+import BooksPage from './components/BooksPage'
 
 const ViewerQueries = {
-  viewer: () => Relay.QL`query { viewer}`,
-};
+  viewer: () => Relay.QL`query { viewer}`
+}
 
 const AuthorQueries = {
   author: () => Relay.QL`
   query { 
     author(id: $authorId)
-  }`,
-};
+  }`
+}
 
 export default (
   <Route
@@ -33,4 +33,4 @@ export default (
       queries={AuthorQueries}
     />
   </Route>
-);
+)

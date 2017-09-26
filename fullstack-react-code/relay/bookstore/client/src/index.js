@@ -1,26 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import createHashHistory from 'history/lib/createHashHistory';
-import Relay from 'react-relay';
-import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware';
-import Router from 'react-router/lib/Router';
-import useRouterHistory from 'react-router/lib/useRouterHistory';
-import useRelay from 'react-router-relay';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import createHashHistory from 'history/lib/createHashHistory'
+import Relay from 'react-relay'
+import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware'
+import Router from 'react-router/lib/Router'
+import useRouterHistory from 'react-router/lib/useRouterHistory'
+import useRelay from 'react-router-relay'
 
-import routes from './routes';
+import routes from './routes'
 
-import './semantic-dist/semantic.min.css';
-import './styles/index.css';
+import './semantic-dist/semantic.min.css'
+import './styles/index.css'
 
 // Customize this based on your server's URL
-const graphQLUrl = 'http://localhost:3001/graphql';
+const graphQLUrl = 'http://localhost:3001/graphql'
 
 // Configure Relay with a "NetworkLayer"
 Relay.injectNetworkLayer(
   new Relay.DefaultNetworkLayer(graphQLUrl)
-);
+)
 
-const history = useRouterHistory(createHashHistory)({ queryKey: false });
+const history = useRouterHistory(createHashHistory)({ queryKey: false })
 
 ReactDOM.render(
   <Router
@@ -30,4 +30,4 @@ ReactDOM.render(
     environment={Relay.Store}
   />,
   document.getElementById('root')
-);
+)

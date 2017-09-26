@@ -1,9 +1,8 @@
-import React from 'react';
-import Relay from 'react-relay';
-import FancyBook from './FancyBook';
+import React from 'react'
+import Relay from 'react-relay'
+import FancyBook from './FancyBook'
 
 const BookItem = (props) => {
-  const a = 1;
   return (
     <div className='bookItem'>
       <FancyBook book={props.book} />
@@ -17,8 +16,8 @@ const BookItem = (props) => {
         <div className='description'>{props.book.description}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Relay.createContainer(BookItem, {
   fragments: {
@@ -34,6 +33,6 @@ export default Relay.createContainer(BookItem, {
         count
       }
     }
-    `,
-  },
-});
+    `
+  }
+})

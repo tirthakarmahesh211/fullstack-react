@@ -1,7 +1,7 @@
-import React from 'react';
-import Link from 'react-router/lib/Link';
+import React from 'react'
+import Link from 'react-router/lib/Link'
 
-import '../styles/TopBar.css';
+import '../styles/TopBar.css'
 
 const TopBar = () => (
   <div
@@ -20,6 +20,6 @@ const TopBar = () => (
     </div>
     <div className='right menu' />
   </div>
-);
+)
 
-export default TopBar;
+export default TopBar

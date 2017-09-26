@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import Link from 'react-router/lib/Link';
-import Relay from 'react-relay';
-import BookItem from './BookItem';
+import React, { Component } from 'react'
+import Link from 'react-router/lib/Link'
+import Relay from 'react-relay'
+import BookItem from './BookItem'
 
 class AuthorPage extends Component {
-  renderBook(bookEdge) {
+  renderBook (bookEdge) {
     return (
       <Link
         to={`/books/${bookEdge.node.slug}`}
@@ -13,12 +13,12 @@ class AuthorPage extends Component {
       >
         <BookItem book={bookEdge.node} />
       </Link>
-    );
+    )
   }
 
-  render() {
-    const author = this.props.author;
-    const books = this.props.author.books.edges.map(this.renderBook);
+  render () {
+    const author = this.props.author
+    const books = this.props.author.books.edges.map(this.renderBook)
 
     return (
       <div className='authorPage bookPage sixteen wide column'>
@@ -51,7 +51,7 @@ class AuthorPage extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -72,6 +72,6 @@ export default Relay.createContainer(AuthorPage, {
           }
         }
       }
-    }`,
-  },
-});
+    }`
+  }
+})

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import Link from 'react-router/lib/Link';
-import Relay from 'react-relay';
-import BookItem from './BookItem';
+import React, { Component } from 'react'
+import Link from 'react-router/lib/Link'
+import Relay from 'react-relay'
+import BookItem from './BookItem'
 
 class BooksPage extends Component {
-  renderBook(bookEdge) {
+  renderBook (bookEdge) {
     return (
       <Link
         to={`/books/${bookEdge.node.slug}`}
@@ -13,23 +13,23 @@ class BooksPage extends Component {
       >
         <BookItem book={bookEdge.node} />
       </Link>
-    );
+    )
   }
 
-  render() {
-    const books = this.props.viewer.books.edges.map(this.renderBook);
+  render () {
+    const books = this.props.viewer.books.edges.map(this.renderBook)
     return (
       <div className='sixteen wide column'>
         <h1>JavaScript Books</h1>
         <div className='ui grid centered'>{books}</div>
       </div>
-    );
+    )
   }
 }
 
 export default Relay.createContainer(BooksPage, {
   initialVariables: {
-    count: 100,
+    count: 100
   },
   fragments: {
     viewer: () => Relay.QL`
@@ -39,11 +39,11 @@ export default Relay.createContainer(BooksPage, {
         edges {
           node {
             slug
-            ${BookItem.getFrament('book')}
+            ${BookItem.getFragment('book')}
           }
         }
       }
     }
-    `,
-  },
-});
+    `
+  }
+})
