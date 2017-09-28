@@ -3,20 +3,6 @@ import Relay from 'react-relay'
 import RelayMutationType from 'react-relay/lib/RelayMutationType'
 
 export default class UpdateBookMutation extends Relay.Mutation {
-  constructor () {
-    super()
-    this.fragments = {
-      book: () => Relay.QL`
-        fragment on Book {
-          id
-          name
-          tagline
-          description
-        }
-      `
-    }
-  }
-
   getMutation () {
     return Relay.QL`mutation { updateBook }`
   }
@@ -60,4 +46,15 @@ export default class UpdateBookMutation extends Relay.Mutation {
     console.log('optimisticResponse', optimisticResponse)
     return optimisticResponse
   }
+}
+
+UpdateBookMutation.fragments = {
+  book: () => Relay.QL`
+    fragment on Book {
+      id
+      name
+      tagline
+      description
+    }
+  `
 }

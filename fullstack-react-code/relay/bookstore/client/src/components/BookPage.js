@@ -1,13 +1,29 @@
 import React, { Component } from 'react'
 import Link from 'react-router/lib/Link'
 import Relay from 'react-relay'
+import UpdateBookMutation from '../mutations/UpdateBookMutation'
 import BookItem from './BookItem'
 import FancyBook from './FancyBook'
 import { RIEInput, RIETextArea } from 'riek'
 
 class BookPage extends Component {
+  constructor (props) {
+    super(props)
+    this.handleBookChange = this.handleBookChange.bind(this)
+  }
+
   handleBookChange (newState) {
-    console.log('bookChanged', newState)
+    const book = Object.assign({}, this.props.book, newState)
+    console.log(book, newState)
+    Relay.Store.commitUpdate(
+      new UpdateBookMutation({
+        id: book.id,
+        name: book.name,
+        tagline: book.tagline,
+        description: book.description,
+        book: this.props.book
+      })
+    )
   }
   renderAuthor (authorEdge) {
     return (
@@ -84,6 +100,7 @@ export default Relay.createContainer(BookPage, {
           }
         }
       }
+      ${UpdateBookMutation.getFragment('book')}
     }
     `
   }
