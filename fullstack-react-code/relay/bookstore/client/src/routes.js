@@ -6,6 +6,7 @@ import Route from 'react-router/lib/Route'
 import App from './components/App'
 import AuthorPage from './components/AuthorPage'
 import BooksPage from './components/BooksPage'
+import BookPage from './components/BookPage'
 
 const ViewerQueries = {
   viewer: () => Relay.QL`query { viewer}`
@@ -15,6 +16,12 @@ const AuthorQueries = {
   author: () => Relay.QL`
   query { 
     author(id: $authorId)
+  }`
+}
+const BookQueries = {
+  book: () => Relay.QL`
+  query {
+    book(slug: $bookSlug)
   }`
 }
 
@@ -31,6 +38,11 @@ export default (
       path='/authors/:authorId'
       component={AuthorPage}
       queries={AuthorQueries}
+    />
+    <Route
+      path='/books/:bookSlug'
+      component={BookPage}
+      queries={BookQueries}
     />
   </Route>
 )

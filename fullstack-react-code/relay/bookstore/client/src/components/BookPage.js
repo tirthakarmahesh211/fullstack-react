@@ -6,6 +6,9 @@ import FancyBook from './FancyBook'
 import { RIEInput, RIETextArea } from 'riek'
 
 class BookPage extends Component {
+  handleBookChange (newState) {
+    console.log('bookChanged', newState)
+  }
   renderAuthor (authorEdge) {
     return (
       <Link
@@ -26,8 +29,9 @@ class BookPage extends Component {
   }
 
   render () {
-    const { book } = this.props
+    const book = this.props.book
     const authors = book.authors.edges.map(this.renderAuthor)
+
     return (
       <div className='bookpage sixteen wide column'>
         <div className='spacer row' />
@@ -37,10 +41,16 @@ class BookPage extends Component {
           </div>
           <div className='ten wide column'>
             <div className='content ui form'>
-              <h2>{book.name}</h2>
-              <div className='tagline hr'>{book.tagline}</div>
+              <h2>
+                <RIEInput value={book.name} propName={'name'} change={this.handleBookChange} />
+              </h2>
+              <div className='tagline hr'>
+                <RIEInput value={book.tagline} propName={'tagline'} change={this.handleBookChange} />
+              </div>
               <div className='description'>
-                <p>{book.description}</p>
+                <p>
+                  <RIETextArea value={book.description} propName={'description'} change={this.handleBookChange} />
+                </p>
               </div>
             </div>
             <div className='ten wide column authorsSection'>
